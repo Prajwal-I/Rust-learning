@@ -8,23 +8,61 @@ use std::cmp::Ordering;
 
 fn main() {
     println!("############################");
-    tut_10_1();
+    tut_12_1();
     println!("############################");
 }
 
+fn tut_12_1() {
+    //While loop
+    let arr = [1,2,3,4,5];
+    let mut loop_idx = 0;
+    while loop_idx < arr.len() {
+        println!("Arr value at {} is {}", loop_idx, arr[loop_idx]);
+        loop_idx += 1;
+    }
+}
+
+fn tut_11_1() {
+    //Looping through Array
+    let arr_2 = [1,2,3,4,5,6,7,8,9];
+    let mut loop_idx = 0;
+    //loop key word for looping
+    loop {
+        if arr_2[loop_idx] % 2 == 0 {
+            loop_idx += 1;
+            continue;
+        }
+        // TO break loop at length of array
+        //if loop_idx == arr_2.len()-1 { 
+        if arr_2[loop_idx] == 9 {
+            break;
+        }
+        println!("Val = {}", arr_2[loop_idx]);
+        loop_idx += 1;
+    }
+}
+
+fn tut_11() {
+    //Arrays
+    let arr_1 = [1,2,3,4];
+    println!("1st Element = {}",arr_1[0]);
+    println!("Length = {}", arr_1.len());
+}
+
 fn tut_10_1() {
-    let my_age = 38;
+    let my_age = 18;
     let voting_age = 18;
     //match has many built in functions, cmp is one, which compares values.
     match my_age.cmp(&voting_age) {
         Ordering::Less => println!("Can't Vote"),
         Ordering::Greater => println!("Can Vote"),
-        Ordering::Equal => println!("You just turned legal! ; )")
+        Ordering::Equal => println!("You just turned legal! ;)")
     }
 }
 
 fn tut_10() {
     //Match (equivalent to switch case)
+    // 1..3 indicated range from 1 to 2, 1..=3 includes 3 in range
     let my_age = 16;
     match my_age {
         (1..=18) => println!("Important Age"),
@@ -70,7 +108,7 @@ fn tut_7_random_num() {
     println!("Random number = {}", random_num);
 }
 
-fn tut_P6() {
+fn tut_6() {
     //Arithmetic operations
     let num_1: u32 = 5;
     let mut num_2: u32 = 4;
@@ -105,6 +143,7 @@ fn tut_3() {
     println!("Max u32: {}", u32::MAX);
     println!("Max u64: {}", u64::MAX);
     println!("Max u128: {}", u128::MAX);
+    //usize for mutable variables, let mut a: usize = 2;
     println!("Max usize: {}", usize::MAX);
     println!("Max f32: {}", f32::MAX);
     println!("Max f64: {}", f64::MAX);
