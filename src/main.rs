@@ -7,19 +7,112 @@ use std::fs::File;
 use std::cmp::Ordering;
 
 fn main() {
-    tut3();
+    println!("############################");
+    tut_10_1();
+    println!("############################");
 }
 
-fn tut3() {
+fn tut_10_1() {
+    let my_age = 38;
+    let voting_age = 18;
+    //match has many built in functions, cmp is one, which compares values.
+    match my_age.cmp(&voting_age) {
+        Ordering::Less => println!("Can't Vote"),
+        Ordering::Greater => println!("Can Vote"),
+        Ordering::Equal => println!("You just turned legal! ; )")
+    }
+}
+
+fn tut_10() {
+    //Match (equivalent to switch case)
+    let my_age = 16;
+    match my_age {
+        (1..=18) => println!("Important Age"),
+        21 | 50 => {
+            println!("Important Age")
+        },
+        65..=i32::MAX => println!("Important Age"),
+        // Default is written as _
+        _ => println!("Unimportant Age")
+    }
+
+}
+
+fn tut_9() {
+    //ternary operator
+    let my_age = 24;
+    let can_vote = 
+        if my_age > 18 {
+            true
+        } else {
+            false
+        };
+    println!("Can vote = {}", can_vote);
+}
+
+fn tut_8() {
+    //if else
+    let age = 21;
+    if (age>=1) && (age<=18) {
+        println!("Important Birthday");
+    } else if (age == 21) || age == 50 {
+        println!("Important Birthday");
+    } else if age >=65 {
+        println!("Important Birthday");
+    } else {
+        println!("Unimportant Birthday");
+    }
+}
+
+fn tut_7_random_num() {
+    //random number 1 to 100
+    let random_num = rand::thread_rng().gen_range(1..101);
+    println!("Random number = {}", random_num);
+}
+
+fn tut_P6() {
+    //Arithmetic operations
+    let num_1: u32 = 5;
+    let mut num_2: u32 = 4;
+    println!("5 + 4 = {}", num_1 + num_2);
+    println!("5 - 4 = {}", num_1 - num_2);
+    println!("5 * 4 = {}", num_1 * num_2);
+    println!("5 / 4 = {}", num_1 / num_2);
+    println!("5 % 4 = {}", num_1 % num_2);
+    num_2 += 1;
+    println!("num_2 + 1 = {}", num_2);
+}
+
+fn tut_5() {
+    //Prescision of f32 vs f64
+    let num_1:f32 = 1.111111111111111;
+    println!("f32 : {}",num_1 + 0.111111111111111);
+    let num_2:f64 = 1.111111111111111;
+    println!("f64 : {}",num_2 + 0.111111111111111);
+}
+
+fn tut_4() {
+    //data types
+    let is_true = true;
+    let my_grade = 'A';
+    // to ignore not using variable warning by compiler
+    let _is_true = false;
+}
+
+fn tut_3() {
     // unsigned integers: u8, u16, u32, u64, u128, usize
     // signed integers: i8, i16, i32, i64, i128, isize
     println!("Max u32: {}", u32::MAX);
     println!("Max u64: {}", u64::MAX);
     println!("Max u128: {}", u128::MAX);
     println!("Max usize: {}", usize::MAX);
+    println!("Max f32: {}", f32::MAX);
+    println!("Max f64: {}", f64::MAX);
+    println!("Max i64: {}", i64::MAX);
 }
 
-fn tut2() {
+fn tut_2() {
+    //Constants and parsing, inbuilt err haldling Err and Ok
     const ONE_MIL: u32 = 1_000_000;
     const PI:f32 = 3.141592;
     let age:&str = "47";
@@ -30,7 +123,8 @@ fn tut2() {
 
 }
 
-fn tut1() {
+fn tut_1() {
+    //IO operations
     println!("Thou shall be known as what?");
     let mut name = String::new();
     let greeting = "Namaste 🙏🙏🙏";
