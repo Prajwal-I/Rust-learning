@@ -9,8 +9,65 @@ use std::cmp::Ordering;
 
 fn main() {
     println!("############################");
-    tut_16();
+    tut_18();
     println!("############################");
+}
+
+/*
+    TUT 18 Functions ---start
+ */
+fn tut_18() {
+    //Functions
+    say_hello();
+    get_sum(3,4);
+    println!("{}",get_sum_2(4,5));
+    println!("{}",get_sum_return(42,5));
+}
+
+fn get_sum_return(x: i32, y: i32) -> i32 {
+    println!("{} + {} = {}", x, y, x+y);
+    return x + y;
+}
+
+fn get_sum_2(x: i32, y: i32) -> i32 {
+    println!("{} + {} = {}", x, y, x+y);
+    //can return without return keyword, but no ;
+    x + y
+}
+
+fn get_sum(x: i32, y: i32) {
+    println!("{} + {} = {}", x, y, x+y);
+}
+
+fn say_hello() {
+    println!("Hello world");
+}
+/*
+    TUT 18 Functions ---End
+ */
+
+fn tut_17() {
+    //Vectors
+    let vec_1: Vec<i32> = Vec::new();
+    println!("Vec_1 size = {}",vec_1.len());
+    //vec_1.push('a' as i32);
+    let mut vec_2: Vec<i32> = vec![1,2,3,4];
+    vec_2.push(5);
+    println!("1st ele of vec_2 - {}", vec_2[1]);
+    let second: &i32 = &vec_2[1];
+    println!("second - {}", second);
+    match vec_2.get(1) {
+        Some(second) => println!("2nd ele of vec_2 - {}", second),
+        None => println!("No value at 2nd element of vec_2")
+    }
+    for i in &mut vec_2 {
+        *i *= 2;
+    }
+    for i in &vec_2 {
+        println!("vec_2 value - {}", i);
+    }
+    println!("Length of vec_2 - {}", vec_2.len());
+    println!("Pop: {:?}", vec_2.pop());
 }
 
 fn tut_16() {
