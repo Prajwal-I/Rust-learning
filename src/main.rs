@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use std::fmt::Display;
 use std::io;
 use rand::Rng;
 use std::io::{Write, BufRead, BufReader, ErrorKind};
@@ -8,8 +9,110 @@ use std::cmp::Ordering;
 
 fn main() {
     println!("############################");
-    tut_13();
+    tut_16();
     println!("############################");
+}
+
+fn tut_16() {
+    //enums
+    enum Day {
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday,
+        Saturday,
+        Sunday
+    }
+
+    impl Day {
+        fn is_weekend(&self) -> bool {
+            match self {
+                Day::Saturday | Day::Sunday => true,
+                _ => false
+            }
+        }
+    }
+
+    let day:Day = Day::Monday;
+    match day {
+        Day::Monday => println!("Monday new begining"),
+        Day::Tuesday => println!("Getting started"),
+        Day::Wednesday => println!("Its wednesday my dudes"),
+        Day::Thursday => println!("In two days"),
+        Day::Friday => println!("dis friday"),
+        Day::Saturday => println!("Tis weekend"),
+        Day::Sunday => println!("Tis last weekend njoy like never before.")
+    }
+    println!("Is it weekend today - {}", day.is_weekend());
+    println!("Is Weekday, - {}", !Day::is_weekend(&day));
+}
+
+fn tut_15() {
+    //type casting
+    let num_1:u8 = 12;
+    let num_2:u8 = 34;
+    let num_3:u32 = (num_1 + num_2) as u32;
+    let num_4:u64 = (num_2 as u64) + (num_3 as u64);
+    let ch:char = 68 as char; //ASCII for D = 68
+    let alp: char = 'F';
+    println!("num_3 - {}, num_4 - {}, ch - {}, alp UNI - {}",
+     num_3, num_4, ch, alp as u16);
+}
+
+fn tut_14_1() {
+    let str1 = String::from("a d w g e f");
+    println!("Str1 = {}",str1);
+    let mut v1: Vec<char> = str1.chars().collect();
+    // for vc in v1 {
+    //     println!("v1 content - {}",vc);
+    // }
+    v1.sort();
+    //removes repeating chars
+    v1.dedup();
+    for vc in v1 {
+        println!("v1 content sort & dedup - {}",vc);
+    }
+    let st2: &str = "Henlo";
+    let mut st3 = st2.to_string();
+    println!("st2 - {}, st3 - {}", st2, st3);
+    let byte_arr_1 = st3.as_bytes();
+    for bt in byte_arr_1 {
+        println!("bt element = {}", (bt));
+    }
+    //copies string till specified index range
+    let st4 = &st2[0..4];
+    println!("st4 aplit index - {}", st4);
+    println!("st4 len - {}",st4.len());
+    st3.clear();
+    println!("st3 after .clear() - {}", st3);
+    //concatinating strings
+    let st_1 = String::from("yooo");
+    let st_2 = String::from("bruhhh");
+    let st_test = String::from("testtt");
+    let st_3 = st_1.clone() + &st_2 + &st_test;
+    for ch in st_3.bytes() {
+        println!("element in st_3 concatinated - {}", ch);
+    }
+    println!("st_1 after concatinating - {}", st_1);    
+}
+
+fn tut_14() {
+    //Strings, String type -> vector of bytes, can be changed
+    //&str -> referece, its pointing to string, used for viewing
+    let mut st1 = String::new();
+    st1.push('A');
+    st1.push_str(" Word");
+    //looping through string
+    for wrd in st1.chars() {
+        println!("{}",wrd);
+    }
+    //split
+    for wrd in st1.split_whitespace() {
+        println!("{}",wrd);
+    }
+    let st2 = st1.replace("A", "Another");
+    println!("{}",st2);
 }
 
 fn tut_13() {
