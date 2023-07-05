@@ -22,6 +22,28 @@ fn tut_18() {
     get_sum(3,4);
     println!("{}",get_sum_2(4,5));
     println!("{}",get_sum_return(42,5));
+
+    let (val_1, val_2) = get_2_vals(5);
+    println!("Returned values 1-> {}, 2-> {}", val_1, val_2);
+    let list_ele = vec![1,2,3];
+    println!("sum of all list_ele is - {}", sum_list(&list_ele));
+}
+
+fn sum_list(list: &[i32]) -> i32 {
+    /*
+        A function that has a parameter as a reference to a vector array
+        that returns the sum of all the elements of that array.
+     */
+    let mut sum = 0;
+    for &i in list.iter() {
+        sum += &i;
+    }
+    return sum;
+}
+
+fn get_2_vals(x: i32) -> (i32, i32) {
+    // A function that returns multiple values
+    return (x+1 , x+2);
 }
 
 fn get_sum_return(x: i32, y: i32) -> i32 {
