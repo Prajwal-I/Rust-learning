@@ -8,8 +8,26 @@ use std::cmp::Ordering;
 
 fn main() {
     println!("############################");
-    tut_12_1();
+    tut_13();
     println!("############################");
+}
+
+fn tut_13() {
+    //Tuples
+    let tuple: (u32, String, f32) = (23, "Shyam".to_string(), 50_893.00);
+    //using index to get value
+    println!("Name: {}", tuple.1);
+    //creating seperate variables from tuple
+    let (v1, v2, v3) = tuple;
+    println!("Age: {}", v1);
+}
+
+fn tut_12_2() {
+    //for loop
+    let arr = [1,2,3,4,5];
+    for val in arr.iter() {
+        println!("Array value {}", val);
+    }
 }
 
 fn tut_12_1() {
