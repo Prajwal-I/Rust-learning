@@ -6,11 +6,38 @@ use rand::Rng;
 use std::io::{Write, BufRead, BufReader, ErrorKind};
 use std::fs::File;
 use std::cmp::Ordering;
+//Trait
+use std::ops::Add;
 
 fn main() {
-    println!("############################");
-    tut_18();
-    println!("############################");
+    println!("#################################");
+    tut_19();
+    println!("#################################");
+}
+
+fn tut_20() {
+    //Ownership
+    // stack -> memory for variables of fixed size
+    // Heap -> When putting data on heap, we request a certain amount of mem
+    // from the OS, it finds space and gives the address of that location back
+    // called pointer
+    //RULES OF OWNERSHIP
+    //1. Each value has variable that's its owner.
+    //2. There is only one owner at a time for a value.
+    //3. When the owner goes out of scope, its value dissapears.
+}
+
+fn tut_19() {
+    //Generics, funtions that specify the datatypes of variables at a later time
+    //Functions take params and returns any data type
+    println!("Generics, same function for multiple data types");
+    println!("int vals {} + {} = {}", 5, 6, get_sum_gen(5,6));
+    println!("float values {} + {} = {}", 4.3, 5.4, get_sum_gen(4.3, 5.4));
+}
+
+//using Traits Add -> for + operator
+fn get_sum_gen<T:Add<Output = T>>(x: T, y: T) -> T {
+    return x + y;
 }
 
 /*
