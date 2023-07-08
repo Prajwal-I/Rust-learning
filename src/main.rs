@@ -8,24 +8,107 @@ use std::fs::File;
 use std::cmp::Ordering;
 //Trait
 use std::ops::Add;
+use std::collections::HashMap;
 
 fn main() {
     println!("#################################");
-    tut_19();
+    tut_22();
     println!("#################################");
+}
+
+fn tut_22() {
+    //Struct -> Custome Datatype
+    struct Titan {
+        name: String,
+        size: i32,
+        holder_name: String,
+        hostile_to_eldia: bool
+    }
+    let mut cart_titan = Titan {
+        name: String::from("Cart Titan"),
+        size: 4,
+        holder_name: String::from("Peick"),
+        hostile_to_eldia: true
+    };
+    println!("Cart titan's height is {} meters.", cart_titan.size);
+    cart_titan.hostile_to_eldia = false;
+
+    //Structs using geneics, like functions
+    struct Rectangle<T, K> {
+        length: T,
+        breadth: K
+    }
+    let rectangle = Rectangle {
+        length: 23,
+        breadth: 43.4
+    };
+    let rectangle_prank = Rectangle {
+        length: "sike",
+        breadth: "nigga"
+    };
+}
+
+fn tut_21() {
+    //HashMaps
+    let mut heroes: HashMap<&str, &str> = HashMap::new();
+    heroes.insert("tatakae", "eren yeagah");
+    heroes.insert("erehh", "mikasa");
+    heroes.insert("shinzosasageyoo", "ErivinDanjooo");
+
+    for (k,v) in heroes.iter() {
+        println!("{} says {}", v, k);
+    }
+    println!("length of HashMapuu is {}", heroes.len());
+    if heroes.contains_key("erehh") {
+        let mikasa_value = heroes.get("erehh");
+        match mikasa_value {
+            Some(x) => println!("MIkasa says erehh is in hashmapuu"),
+            None => println!("Mikasa not found in hashmapuu")
+        }
+    }
 }
 
 fn tut_20() {
     //Ownership
-    // stack -> memory for variables of fixed size
+    // stack -> memory for variables of fixed size, stores in last in first out manner
     // Heap -> When putting data on heap, we request a certain amount of mem
     // from the OS, it finds space and gives the address of that location back
     // called pointer
+
     //RULES OF OWNERSHIP
     //1. Each value has variable that's its owner.
     //2. There is only one owner at a time for a value.
     //3. When the owner goes out of scope, its value dissapears.
+    let mut str_1 = String::from("Hello");
+    let str_2 = str_1.clone(); // Will work if str_1.clone(), println
+    //println!("{}",str_1); //error
+    /*
+        str_3 = str_1 gives error, coz String "Hello" is a val, has one owner str_1 var
+        then str_2 becomes its owner, and str_1 is moved/removed.
+        so when assigning to str_3, str_1 is not owner of val "hello", so can't give what is dosent own
+     */
+    //let str_3 = str_1;
+    print_str(str_2.clone());// below line wont work if cloned, as ownership goes to function
+    let ret_str = return_str(str_2);
+    change_str(&mut str_1);
+    println!("str_1 after change function - {}",str_1);
 }
+
+fn print_str(x: String) {
+    println!("String is - {}", x);
+}
+
+fn return_str(x: String) -> String {
+    println!("String to return - {}",x);
+    x
+}
+
+fn change_str(x: &mut String) {
+    x.push_str(" is happy. Finally!");
+    println!("Changed String is - {}", x);
+}
+
+// End of tut_20
 
 fn tut_19() {
     //Generics, funtions that specify the datatypes of variables at a later time
