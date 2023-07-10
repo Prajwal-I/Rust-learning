@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+
 use std::fmt::Display;
 use std::io;
 use rand::Rng;
@@ -9,11 +10,139 @@ use std::cmp::Ordering;
 //Trait
 use std::ops::Add;
 use std::collections::HashMap;
+use std::any::type_name;
+
+//TUtorial 24 -> modules
+mod restaurant;
+use crate::restaurant::order_food;
+
 
 fn main() {
     println!("#################################");
-    tut_22();
+    tut_24();
     println!("#################################");
+}
+
+fn tut_24() {
+    /*
+        Modules in Rust, crate -> rust file with some code
+        package contains multiple crates
+        definitions -
+        Crate - Modules that produce a library or an executable
+        Modules -: Organise and handle privacy
+        Packages -: Build, test and share crates
+        Paths -: A way of naming an item such as a struct or function
+     */
+    //added folder structure in src/restaurant as demo
+    order_food();
+}
+
+fn tut_23() {
+    //Traits -> for adding functions to structs,
+    //They like interfaces in OOPs concepts, 
+    trait Shape {
+        //constructor
+        fn new(length: f32, width: f32) -> Self;
+        fn area(&self) -> f32;
+    }
+    struct Rectangle {
+        length: f32,
+        width: f32
+    }
+    struct Circle {
+        length:f32,
+        width: f32
+    }
+    impl Shape for Rectangle {
+        fn new(length: f32, width: f32) -> Rectangle {
+            return Rectangle {
+                length,
+                width
+            }
+        }
+        //area gives l*b
+        fn area(&self) -> f32 {
+            return self.length * self.width;
+        }
+    }
+    const PI: f32 = 3.1415926;
+    impl Shape for Circle {
+        fn new(length: f32, width: f32) -> Circle {
+            return Circle {
+                length,
+                width
+            }
+        }
+        // area gives pi *r *r
+        fn area(&self) -> f32 {
+            return (self.length/2.0).powf(2.0) * PI
+        }
+    }
+    let rect:Rectangle = Shape::new(3.0,4.0);
+    let circ:Circle = Shape::new(4.0,4.0);
+    println!("Area of rectangle - {}", rect.area());
+    println!("Area of circle - {}", circ.area());
+}
+
+fn tut_23_1() {
+    //Traits with generics //self excercise
+    //Simulating OOP inheritance behaviour, getters and setters
+    trait Organism<N,A> {
+        fn new(name: N, age: A) -> Self;
+        fn get_age(&self) -> &A;
+        fn get_name(&self) -> &N;
+        fn set_age(&mut self,age:A);
+    }
+    struct Dog<N, A> {
+        name: N,
+        age: A
+    }
+    struct Horse<N, A> {
+        name:N,
+        age:A
+    }
+    impl<N,A> Organism<N,A> for Dog<N,A> {
+        fn new(name: N, age: A) -> Dog<N,A> {
+            return Dog {
+                name,
+                age
+            }
+        }
+        fn get_age(&self) -> &A {
+            &self.age
+        }
+        fn get_name(&self) -> &N {
+            &self.name
+        }
+        fn set_age(&mut self,new_age:A) {
+            self.age = new_age;
+        }
+    }
+    impl<N,A> Organism<N,A> for Horse<N,A> {
+        fn new(name: N, age: A) -> Horse<N,A> {
+            return Horse {
+                name,
+                age
+            }
+        }
+        fn get_age(&self) -> &A {
+            &self.age
+        }
+        fn get_name(&self) -> &N {
+            &self.name
+        }
+        fn set_age(&mut self, new_age:A) {
+            self.age = new_age;
+        }
+    }
+    let mut horse:Horse<&str, i32> = Organism::new("Bojack Horseman", 32);
+    let mut dog:Dog<&str, &str> = Organism::new("Mr. Peanutbutter", "sweet sixteen");
+
+    println!("Age of horse - {}", horse.get_age());
+    println!("Age of dog - {}", dog.get_age());
+    dog.set_age("its 24");
+    horse.set_age(43);
+
 }
 
 fn tut_22() {
@@ -46,6 +175,27 @@ fn tut_22() {
         length: "sike",
         breadth: "nigga"
     };
+
+    //structs as generic type //complex struct
+    struct Parent<T1, T2> {
+        child_1:T1,
+        child_2:T2
+    }
+
+    let parent_struct = Parent {
+        child_1: Rectangle {
+            length: 20,
+            breadth: "Wont Say"
+        },
+        child_2: Titan {
+            name: String::from("Attach Titan"),
+            size: 15,
+            holder_name: String::from("Eren iyeagah"),
+            hostile_to_eldia: false
+        }
+    };
+    println!("parent struct props  =  {}", parent_struct.child_1.breadth);
+    
 }
 
 fn tut_21() {
