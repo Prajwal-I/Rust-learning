@@ -1,11 +1,11 @@
 #![allow(unused)]
 
-
 use std::fmt::Display;
 use std::io;
 use rand::Rng;
 use std::io::{Write, BufRead, BufReader, ErrorKind};
 use std::fs::File;
+use std::fs;
 use std::cmp::Ordering;
 //Trait
 use std::ops::Add;
@@ -16,11 +16,185 @@ use std::any::type_name;
 mod restaurant;
 use crate::restaurant::order_food;
 
-
 fn main() {
     println!("#################################");
-    tut_24();
+    tut_28();
     println!("#################################");
+	let mut t: Vec<i32> = vec![11,12,12,23,34];
+	println!("{}",remove_dup(&mut t));
+}
+
+fn str_str(needle: String, haystack: String) ->i32 {
+	
+	0
+}
+
+fn remove_dup(nums: &mut Vec<i32>) -> i32 {
+	let mut res:Vec<i32> = vec![];
+	for i in nums.iter() {
+		if !res.contains(i) {
+			res.push(*i);
+		}
+	}
+	*nums = res.clone();
+	return res.len().try_into().unwrap();
+}
+
+fn tut() {
+	let mut a = vec![1,2,3];
+	a.push(4);
+	a.is_empty();
+	match a.pop() {
+		Some(4) => println!("pop 1"),
+		_ => println!("not poped")
+	}
+	for x in a.iter() {
+		println!("{}",x);
+	}
+	let r = a.len() as i32;
+}
+
+fn tut_28() {
+	//Closures -> function without a name, can be passed as arguments to other functions
+	//can be stored in a variable
+	//let var_name = |parameters| -> return_type {
+	//	BODY
+	//}
+	let can_vote = |age: i32| {
+		age >= 18
+	};
+	println!("Can vote - {}", can_vote(24));
+
+	//Closures can access variables outside its scope, it can also modify if its of mut type
+	let mut samp1 = 5;
+	// no parameters -> ||
+	let print_samp = || println!("samp1 - {}", samp1);
+	print_samp();
+	samp1 = 10;
+	let mut change_samp = || samp1 += 1;
+	//print_samp(); -> gives error
+	change_samp();
+	println!("samp1 - {}", samp1);
+	samp1 = 10;
+	println!("samp1 - {}",samp1);
+
+	//Closures as parametes to functions
+	//use_func is generic, takes generic type of function
+	fn use_func<T>(a:i32, b:i32, func: T) -> i32 
+	where T: Fn(i32,i32)->i32 {
+		func(a, b)
+	}
+	let sum = |a,b| a+b;
+	let prod = |a,b| a*b;
+	println!("4+3 = {}",use_func(4, 3, sum));
+	println!("4*3 = {}",use_func(4, 3, prod));
+}
+
+fn tut_27() {
+	//Iterators
+	let mut arr_iter = [1,2,3,4];
+	for val in arr_iter.iter() {
+		println!("{}",val);
+	}
+	// consumes old array, previous invalid
+	// let mut tt = arr_iter.into_iter();
+	// let is_true = tt.all(|x| x>0);
+	let mut iter1 = arr_iter.iter();
+	println!("!st item is - {}",iter1.next().unwrap()); 
+
+}
+
+fn file_tut_remove() {
+	let path = "src/test_dir";
+	fs::create_dir(path).unwrap();
+	let mut ip = String::new();
+	io::stdin().read_line(&mut ip);
+	let close = ip.trim();
+	println!("{}", ip.as_str());
+	println!("{}", ip);
+	match close.cmp("y") {
+		Ordering::Equal => fs::remove_dir_all(path).unwrap(),
+		_ => println!("invalid Input"),
+	}
+}
+
+fn tut_26() {
+    //FILE IO and Result<T,E>, unwrap(), ErrorKind
+	let path = "src/files_created";
+	match fs::create_dir(path) {
+		Ok(()) => (),
+		Err(e) => match e.kind() {
+			ErrorKind::AlreadyExists => {
+				fs::remove_dir_all(path).unwrap();
+				fs::create_dir(path).unwrap();
+			},
+			_ => panic!("Error creating file - {}", e)
+		}
+	};
+    let path = "src/files_created/lines.txt";
+    let output = File::create(path);
+    let mut output = match output {
+        Ok(file) => file,
+        Err(err) => {
+            panic!("Error creating file - {:?}", err);
+        }
+    };
+    write!(output, "line1 text\n some more text line2\nline3")
+        .expect("Error writing to the file");
+    //.unwrap returns the value directly, instead of Result<> and panics if err
+    let input = File::open(path).unwrap();
+    let buffered = BufReader::new(input);
+    for line in buffered.lines() {
+        println!("{}", line.unwrap());
+    }
+    //ErrorKind tutorial -> Enum with all error kinds
+    let output_2 = File::create("src/files_created/rnd_python.py");
+    let output_2 = match output_2 {
+        Ok(file) => file,
+        Err(err) => {
+            match err.kind() {
+				ErrorKind::NotFound => {
+					match File::create("src/files_created/rnd_python.py") {
+						Ok(file) => file,
+						Err(err) => panic!("Error creating py file - {:?}", err)
+					}
+				},
+				_other_err => {
+					panic!("Error creating file - {:?}", err);
+				}
+            }
+        }
+    };
+	let mut remove_file = String::new();
+	println!("Shall we remove files_created directory? Y/N");
+	io::stdin().read_line(&mut remove_file);
+	let close = remove_file.trim();
+	match close {
+		"Y"|"y" => match fs::remove_dir_all("src/files_created") {
+			Ok(()) => println!("files_created dir removed"),
+			Err(err) => panic!("Error removing files_created - {}", err)
+		},
+		_ => return
+	}
+}
+
+fn tut_25() {
+    //Error Handling
+    /*  No exceptions in rust, 
+        Recoverable errors are handled with Result<Ok, Err>, like subscribe in JS
+        unrecoverable errs are handled with panic macro, panic!(), it prints message and program quits
+     */
+    /*
+        Result has 2 variants Ok and Err  
+        enum Result<T,E> {
+            Ok(T),
+            Err(E)
+        }
+        //here T is datatype of variable to return, and E is type of error
+     */
+    //panic!("Error occured, quiting program now");
+    // let arr = [1,2,3,4];
+    // println!("10th indec in arr {}", arr[10]);
 }
 
 fn tut_24() {
