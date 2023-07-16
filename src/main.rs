@@ -9,8 +9,16 @@ use std::fs;
 use std::cmp::Ordering;
 //Trait
 use std::ops::Add;
+
 use std::collections::HashMap;
 use std::any::type_name;
+
+use std::thread;
+use std::time::Duration;
+
+use std::rc::Rc;
+use std::cell::RefCell;
+use std::sync::{Arc, Mutex};
 
 //TUtorial 24 -> modules
 mod restaurant;
@@ -18,12 +26,135 @@ use crate::restaurant::order_food;
 
 fn main() {
     println!("#################################");
-    tut_28();
+    tut_30_2();
     println!("#################################");
-	let mut t: Vec<i32> = vec![11,12,12,23,34];
-	println!("{}",remove_dup(&mut t));
+	// let mut t: Vec<i32> = vec![11,12,12,23,34];
+	// println!("{}",remove_dup(&mut t));
 }
 
+fn tut_30_2() {
+    //RcT => Arc and Mutex, locks
+    struct Bank {
+        balance: f32
+    }
+    fn withdraw(the_bank:&Arc<Mutex<Bank>>, amt:f32) {
+        let mut bank_ref = the_bank.lock().unwrap();
+        if bank_ref.balance < amt {
+            println!("Current balance is {}. Withdraw Smaller amount than {}.", bank_ref.balance, amt);
+        } else {
+            bank_ref.balance -= amt;
+            println!("Withdrew {} from account. Remaining balance is {}.", amt, bank_ref.balance);
+        }
+    }
+    fn customer(the_bank: Arc<Mutex<Bank>>) {
+        withdraw(&the_bank, 5.0);
+    }
+    let bank: Arc<Mutex<Bank>> = Arc::new(Mutex::new(Bank{balance:20.0}));
+    let handles = (0..10).map(|_| {
+        let bank_ref = bank.clone();
+        thread::spawn(|| {
+            customer(bank_ref);
+        })
+    });
+    for handle in handles {
+        handle.join().unwrap();
+    }
+    // for i in 0..10{
+    //     let bank_ref = bank.clone();
+    //     thread::spawn(|| {
+    //         customer(bank_ref);
+    //     }).join().unwrap();
+    // }
+    println!("Total amount after withdrawls is {}", bank.lock().unwrap().balance);
+}
+
+fn tut_30_1() {
+    //RcT -> a smart pointer that can allow multiple owners of variable,
+    // if thread accesses var after main thread dosent exist, then its accessing 
+    // a var that gets wiped along with main func.
+    struct Bank {
+        balance: f32
+    }
+    fn withdraw(the_bank: &mut Bank, amt:f32) {
+        the_bank.balance -= amt;
+    }
+    let mut bank: Bank = Bank {
+        balance: 100.0
+    };
+    withdraw(&mut bank, 5.0);
+    println!("Bank balance after withdraw - {}",bank.balance);
+    fn customer(the_bank: &mut Bank) {
+        withdraw(the_bank, 10.0);
+    }
+    //will throw error,saying bank is accessed by thread that lives longer that main
+    //but belongs to main.
+    // thread::spawn(|| {
+    //     customer(&mut bank);
+    // }).join().unwrap();
+}
+
+fn tut_30() {
+    //Concurrency and threads
+    /*
+        problems with parallel programing
+        1. Threads access data in wrong order.
+        2. Threads are blocked from executing because of confusion
+           over requirements to proceed with execution.
+     */
+    let spawned_thread = thread::spawn(|| {
+        for i in 0..20 {
+            println!("Spawned thread - {}", i);
+            thread::sleep(Duration::from_millis(1));
+        }
+    });
+    for i in 0..15 {
+        println!("Main thread - {}", i);
+        thread::sleep(Duration::from_millis(1));
+    };
+    
+    //To let spawned thread keep executing even after main thread stops.
+    spawned_thread.join().unwrap();
+}
+
+fn tut_29() {
+    //Smart pointers, Box
+    /*
+        Smart pointer is used to store the address of a variable,
+        also with some functionality eg &str_var
+     */
+    // Box creates huge variables on the heap, passes its pointer to stack
+    let var_1 = Box::new(10);
+    let var_2 = Box::new("asd");
+
+    struct TreeNode<T> {
+        pub left: Option<Box<TreeNode<T>>>,
+        pub right: Option<Box<TreeNode<T>>>,
+        pub key: T
+    }
+    impl<T> TreeNode<T> {
+        pub fn new(key: T) -> Self {
+            TreeNode {
+                left: None,
+                right: None,
+                key
+            }
+        }
+        pub fn left(mut self, node: TreeNode<T>) -> Self {
+            self.left = Some(Box::new(node));
+            self
+        }
+        pub fn right(mut self, node: TreeNode<T>) -> Self {
+            self.right = Some(Box::new(node));
+            self
+        }
+    }
+    let node_1 = TreeNode::new(32);
+    node_1.left(TreeNode::new(12)).right(TreeNode::new(43));
+    //println!("node_1.key val - {}",&node_1.key);
+}
+/*
+    leetcode
+*/
 fn str_str(needle: String, haystack: String) ->i32 {
 	
 	0
@@ -53,6 +184,9 @@ fn tut() {
 	}
 	let r = a.len() as i32;
 }
+/*
+    leetcode ends here
+*/
 
 fn tut_28() {
 	//Closures -> function without a name, can be passed as arguments to other functions
